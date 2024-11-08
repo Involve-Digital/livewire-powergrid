@@ -5,6 +5,7 @@ namespace PowerComponents\LivewirePowerGrid\Providers;
 use Illuminate\Database\Events\MigrationsEnded;
 use Illuminate\Support\Facades\{Blade, Event};
 use Illuminate\Support\{ServiceProvider};
+use Leuverink\AssetInjector\AssetManager;
 use Livewire\Features\SupportLegacyModels\{EloquentCollectionSynth, EloquentModelSynth};
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
@@ -24,6 +25,8 @@ class PowerGridServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->shouldInject() && AssetManager::register(new InjectAssets());
+
         if ($this->app->runningInConsole()) {
             $this->commands([UpdateCommand::class]);
             $this->commands([PublishCommand::class]);
@@ -50,7 +53,7 @@ class PowerGridServiceProvider extends ServiceProvider
         $file = __DIR__ . '/../functions.php';
 
         if (file_exists($file)) {
-            require_once($file);
+            require_once $file;
         }
 
         $this->app->alias(PowerGridManager::class, 'powergrid');
@@ -70,6 +73,11 @@ class PowerGridServiceProvider extends ServiceProvider
         Macros::builder();
     }
 
+    public function shouldInject(): bool
+    {
+        return boolval(config('livewire-powergrid.auto_inject_assets'));
+    }
+
     private function publishViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', $this->packageName);
@@ -86,6 +94,8 @@ class PowerGridServiceProvider extends ServiceProvider
 
     private function publishConfigs(): void
     {
+        $this->loadRoutesFrom(__DIR__ . '/../routes.php');
+
         $this->publishes([
             __DIR__ . '/../../resources/config/livewire-powergrid.php' => config_path($this->packageName . '.php'),
         ], 'livewire-powergrid-config');

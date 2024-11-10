@@ -20,7 +20,7 @@ class InjectAssets implements AssetInjector
     {
         $js = route('powergrid.global.js');
 
-        $theme = isTailwind() ? 'tailwind.css' : 'bootstrap.css';
+        $theme = isTailwind() ? 'tailwind.css' : 'bootstrap5.css';
 
         $css = file_get_contents(
             base_path('vendor/power-components/livewire-powergrid/dist/' . $theme)

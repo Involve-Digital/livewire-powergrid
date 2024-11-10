@@ -25,7 +25,7 @@ class PowerGridServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->shouldInject() && AssetManager::register(new InjectAssets());
+        $this->shouldInjectAssets() && AssetManager::register(new InjectAssets());
 
         if ($this->app->runningInConsole()) {
             $this->commands([UpdateCommand::class]);
@@ -73,11 +73,6 @@ class PowerGridServiceProvider extends ServiceProvider
         Macros::builder();
     }
 
-    public function shouldInject(): bool
-    {
-        return boolval(config('livewire-powergrid.auto_inject_assets'));
-    }
-
     private function publishViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', $this->packageName);
@@ -101,5 +96,10 @@ class PowerGridServiceProvider extends ServiceProvider
         ], 'livewire-powergrid-config');
 
         $this->publishes([__DIR__ . '/../../resources/lang' => lang_path('vendor/' . $this->packageName)], $this->packageName . '-lang');
+    }
+
+    private function shouldInjectAssets(): bool
+    {
+        return boolval(config('livewire-powergrid.auto_inject_assets'));
     }
 }

@@ -149,5 +149,5 @@ return [
     |
     */
 
-    'auto_inject_assets' => true,
+    'auto_inject_assets' => false,
 ];

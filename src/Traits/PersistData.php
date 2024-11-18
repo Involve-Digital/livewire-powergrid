@@ -26,7 +26,12 @@ trait PersistData
         }
 
         if (!empty($this->persist)) {
-            $url  = parse_url(strval(filter_input(INPUT_SERVER, 'HTTP_REFERER')));
+            if (filter_input(INPUT_SERVER, 'HTTP_REFERER')){
+                $url  = parse_url(strval(filter_input(INPUT_SERVER, 'HTTP_REFERER')));
+            }else{
+                $url = parse_url($_SERVER['HTTP_REFERER']);
+            }
+
             $path = $url && array_key_exists('path', $url) ? $url['path'] : '/';
             setcookie('pg:' . $this->tableName, strval(json_encode($state)), now()->addYear()->unix(), $path);
         }

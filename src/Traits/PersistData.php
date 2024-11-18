@@ -33,7 +33,7 @@ trait PersistData
             }
 
             $path = $url && array_key_exists('path', $url) ? $url['path'] : '/';
-            setcookie('pg:' . $this->tableName, strval(json_encode($state)), now()->addYear()->unix(), $path);
+            setcookie('pg:' . $this->tableName, strval(json_encode($state)), now()->addDay()->unix(), $path);
         }
     }
 

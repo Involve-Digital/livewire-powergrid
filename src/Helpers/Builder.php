@@ -15,6 +15,7 @@ use PowerComponents\LivewirePowerGrid\Filters\{Builders\Boolean,
     Builders\Number,
     Builders\Select};
 use PowerComponents\LivewirePowerGrid\{Column, PowerGridComponent};
+use Throwable;
 
 class Builder
 {
@@ -69,7 +70,11 @@ class Builder
                 ) {
                     if (count($column) > 1) {
                         foreach ($column as $tableName => $columnValue) {
-                            $field = key(Arr::dot($columnValue));
+                            try {
+                                $field = key(Arr::dot($columnValue));
+                            } catch (Throwable) {
+                                continue;
+                            }
 
                             $value = Arr::dot($columnValue)[$field];
 

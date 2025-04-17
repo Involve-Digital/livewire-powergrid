@@ -158,6 +158,12 @@ class ProcessDataSource
         /** @phpstan-ignore-next-line */
         $results = $this->applyWithSortStringNumber($results, $sortField);
 
+        $results = $results->orderBy($sortField, $this->component->sortDirection);
+
+        if ($this->component->helperSortField) {
+            $results->orderBy($this->component->helperSortField);
+        }
+
         return $results->orderBy($sortField, $this->component->sortDirection);
     }
 

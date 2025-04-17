@@ -9,6 +9,8 @@ trait WithSorting
 {
     public string $sortField = 'id';
 
+    public string $helperSortField = '';
+
     public string $sortDirection = 'asc';
 
     public bool $withSortStringNumber = false;
